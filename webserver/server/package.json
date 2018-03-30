@@ -1,0 +1,23 @@
+{
+  "name": "api-gateway",
+  "version": "1.0.0",
+  "description": "Webserver API to start up OpenRCT2 game via HTTP Post",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BenjixD/OpenRCT2.git"
+  },
+  "keywords": [
+    "RCT2",
+    "webserver"
+  ],
+  "author": "Benjamin Zhao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BenjixD/OpenRCT2/issues"
+  },
+  "homepage": "https://github.com/BenjixD/OpenRCT2#readme"
+}
