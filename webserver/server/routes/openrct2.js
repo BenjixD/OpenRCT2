@@ -52,17 +52,22 @@ router.post('/start', rctSave.single('save'), function(req, res, next){
 // FUNCTION CALLS //////////////////////////////////////////////////////////////
 
 function execStart(name, port, callback){
+	var test = "./" + rctConfig.script_dir + "/" + rctConfig.test;
 	var executable = "./" + rctConfig.script_dir + "/" + rctConfig.exec;
 	var save = rctConfig.save_dir + "/" + name;
 
 	var cmd = executable + " " + save + " " + port;
+	var tst = test + " " + save + " " + port;
+
+	console.log(tst);
 	console.log(cmd);
 
-	var child = exec(cmd, function(err, stdout, stderr){
+	var child = exec(tst, function(err, stdout, stderr){
 		if(err || stderr){
 			console.log(err);
 			callback(err, null);
 		}else{
+			var run = exec(cmd);	//TODO: Pretty weird dirty hack :(
 			console.log('stdout: ' + stdout);
     	console.log('stderr: ' + stderr);
     	callback(null, stdout);
