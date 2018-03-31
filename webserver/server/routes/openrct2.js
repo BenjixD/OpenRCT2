@@ -44,7 +44,7 @@ router.post('/start', rctSave.single('save'), function(req, res, next){
 		if(err){
 			res.status(500).send(err.msg);
 		}else{
-			res.status(400).send("Got It!");
+			res.status(200).send("Got It!");
 		}
 	});
 });
