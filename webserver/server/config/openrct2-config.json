@@ -1,6 +1,6 @@
 {
 	"exec": "start-openrct2.sh",
 	"port": "11752",
-	"save_dir": "saves/",
-	"script_dir": "scripts/"
+	"save_dir": "saves",
+	"script_dir": "scripts"
 }
