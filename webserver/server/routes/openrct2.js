@@ -52,7 +52,7 @@ router.post('/start', rctSave.single('save'), function(req, res, next){
 // FUNCTION CALLS //////////////////////////////////////////////////////////////
 
 function execStart(name, port, callback){
-	var executable = "../" + rctConfig.script_dir + "/" + rctConfig.exec;
+	var executable = "./" + rctConfig.script_dir + "/" + rctConfig.exec;
 	var save = rctConfig.save_dir + "/" + name;
 
 	var cmd = executable + " " + save + " " + port;
