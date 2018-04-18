@@ -48,14 +48,13 @@ export class Submission extends React.Component {
 
 	handleSubmit(event){
 		event.preventDefault();
-
-		axios.post(url, {
-			port: this.state.port,
-			save: this.state.file
-		},
+		const formData = new FormData();
+		formData.append('port', this.state.port);
+		formData.append('save', this.state.file);
+		axios.post(url, formData, 
 		{
 			headers: {
-				'content-type': 'multipart/form-data'
+				'content-type':'multipart/form-data'
 			}
 		}).then((response)=>{
 			alert(response.data);

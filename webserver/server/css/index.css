@@ -1,0 +1,205 @@
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  color: #fff;
+  background: url(../assets/screenshot.png) no-repeat #000 center;
+  background-size: cover;
+  -webkit-text-size-adjust: 100%; /* fix footer bug on iOS */
+}
+
+#background {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  margin-top: -540px;
+  margin-left: -960px;
+  height: 1080px;
+  width: 1920px;
+  background-color: #000;
+}
+
+#background video {
+  min-height: 100%;
+  min-width: 100%;
+}
+
+#gradient {
+  background-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.60) 100%);
+  display: block;
+  height: 1080px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  content: "";
+  z-index: -1;
+}
+
+@media all and (min-width: 1920px), all and (min-height: 1080px) {
+  body {
+    background-size: cover;
+  }
+  #background {
+    top: 0;
+    left: 0;
+    min-width: 100%; 
+    min-height: 100%;
+    margin-top: 0;
+    margin-left: 0;
+  }
+}
+
+@media all and (max-device-height: 799px) {
+  #background {
+    display: none;
+  }
+  #gradient {
+    position: absolute;
+    height: 597px;
+  }
+}
+
+#content {
+  width: auto; 
+  margin: 100px auto;
+  z-index: 1;
+  text-align: center;
+}
+
+#logo {
+  width: 286px;
+  height: 166px;
+  /*background-image: url(../assets/logo.png);*/
+  background-size: 100%;
+  text-indent: -99999px;
+  color: transparent;
+  margin: 0 auto;
+}
+
+#content h1 {
+  font-size: 52px;
+  margin: 0;
+  margin-top: 16px;
+}
+
+#content h2 {
+  font-size: 18px;
+  font-weight: normal;
+  margin: 0;
+  margin-top: 8px;
+}
+
+#buttons {
+  list-style: none;
+  margin: auto;
+  padding: 16px;
+  margin-top: 32px;
+  width: 300px;
+}
+
+#buttons li {
+  padding: 24px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+#buttons li:hover{
+  background: rgba(0,0,0,0.5);
+  cursor: pointer;
+}
+
+#submission {
+  background: rgba(0,0,0,0.7);
+  list-style: none;
+  margin: auto;
+  padding: 24px;
+  margin-top: 32px;
+  width: 300px;
+}
+
+form {
+    width: 80%;
+    margin: 0 auto;
+}
+
+label, input {
+    /* in order to define widths */
+    display: inline-block;
+}
+
+label {
+    width: 20%;
+    /* positions the label text beside the input */
+    text-align: right;
+}
+
+label + input {
+    width: 60%;
+    /* large margin-right to force the next element to the new-line
+       and margin-left to create a gutter between the label and input */
+    margin: 0 10% 5% 4%;
+}
+
+/* only the submit button is matched by this selector,
+   but to be sure you could use an id or class for that button */
+input + input {
+    float: center;
+}
+
+div {
+  color: #fff;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+input[type=submit] {
+    background-color: #555555;
+    color: white;
+    border: none;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+input[type=submit]:hover {
+    background-color: #444444;
+}
+
+.information {
+  display: block;
+  font-size: 12px;
+  color: #7D7D7D;
+}
+
+.information a {
+  color: #7D7D7D;
+}
+
+#footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0,0,0,0.4);
+  font-size: 14px;
+  text-align: center;
+}
+
+#footer ul {
+  padding: 16px;
+  margin: 0;
+  list-style: none;
+}
+
+#footer li {
+  margin-left: 16px;
+  display: inline;
+}
+
+#footer li:first-child {
+  margin-left: 0;
+}

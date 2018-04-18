@@ -14,11 +14,12 @@ app.use(favicon(path.join(__dirname, 'public', 'img', 'favicon.ico')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 //Serve from public
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname)); //hack
 
 //Serve Page
 app.get('/', function(req, res, err){
-	res.send("OpenRCT2 Startup page!");
+	res.sendFile(__dirname + '/index.html');
 });
 
 //Routes
