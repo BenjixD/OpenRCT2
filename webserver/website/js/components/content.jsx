@@ -51,6 +51,9 @@ export class Submission extends React.Component {
 		const formData = new FormData();
 		formData.append('port', this.state.port);
 		formData.append('save', this.state.file);
+
+		console.log(this.state.port);
+
 		axios.post(url, formData, 
 		{
 			headers: {
