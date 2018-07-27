@@ -29,7 +29,7 @@
 
 #include <SDL.h>
 
-namespace OpenRCT2 { namespace Ui
+namespace OpenRCT2::Ui
 {
     enum class DIALOG_TYPE
     {
@@ -374,7 +374,7 @@ namespace OpenRCT2 { namespace Ui
 
         static void ThrowMissingDialogApp()
         {
-            IUiContext * uiContext = GetContext()->GetUiContext();
+            auto uiContext = GetContext()->GetUiContext();
             std::string dialogMissingWarning = language_get_string(STR_MISSING_DIALOG_APPLICATION_ERROR);
             uiContext->ShowMessageBox(dialogMissingWarning);
             throw std::runtime_error(dialogMissingWarning);
@@ -385,6 +385,6 @@ namespace OpenRCT2 { namespace Ui
     {
         return new LinuxContext();
     }
-} }
+} // namespace OpenRCT2::Ui
 
 #endif // __linux__ || __OpenBSD__

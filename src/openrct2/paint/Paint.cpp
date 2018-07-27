@@ -1,4 +1,4 @@
-#pragma region Copyright (c) 2014-2017 OpenRCT2 Developers
+#pragma region Copyright (c) 2014-2018 OpenRCT2 Developers
 /*****************************************************************************
  * OpenRCT2, an open source clone of Roller Coaster Tycoon 2.
  *
@@ -20,12 +20,15 @@
 #include "../drawing/Drawing.h"
 #include "../interface/Viewport.h"
 #include "../localisation/Localisation.h"
+#include "../localisation/LocalisationService.h"
 #include "Paint.h"
-#include "sprite/Sprite.h"
-#include "tile_element/TileElement.h"
+#include "sprite/Paint.Sprite.h"
+#include "tile_element/Paint.TileElement.h"
 
-// Global for paint clipping height
+// Globals for paint clipping
 uint8 gClipHeight = 128; // Default to middle value
+LocationXY8 gClipSelectionA = { 0, 0 };
+LocationXY8 gClipSelectionB = { MAXIMUM_MAP_SIZE_TECHNICAL - 1, MAXIMUM_MAP_SIZE_TECHNICAL - 1 };
 
 paint_session gPaintSession;
 static bool _paintSessionInUse;
@@ -58,7 +61,7 @@ static uint32 paint_ps_colourify_image(uint32 imageId, uint8 spriteType, uint32 
 
 static void paint_session_init(paint_session * session, rct_drawpixelinfo * dpi)
 {
-    session->Unk140E9A8 = dpi;
+    session->DPI = dpi;
     session->EndOfPaintStructArray = &session->PaintStructs[4000 - 1];
     session->NextFreePaintStruct = session->PaintStructs;
     session->UnkF1AD28 = nullptr;
@@ -67,7 +70,7 @@ static void paint_session_init(paint_session * session, rct_drawpixelinfo * dpi)
     {
         quadrant = nullptr;
     }
-    session->QuadrantBackIndex = -1;
+    session->QuadrantBackIndex = std::numeric_limits<uint32>::max();
     session->QuadrantFrontIndex = 0;
     session->PSStringHead = nullptr;
     session->LastPSString = nullptr;
@@ -132,7 +135,7 @@ static paint_struct * sub_9819_c(
     sint32 right = left + g1->width;
     sint32 top = bottom + g1->height;
 
-    rct_drawpixelinfo * dpi = session->Unk140E9A8;
+    rct_drawpixelinfo * dpi = session->DPI;
 
     if (right <= dpi->x)return nullptr;
     if (top <= dpi->y)return nullptr;
@@ -189,7 +192,7 @@ static paint_struct * sub_9819_c(
 */
 void paint_session_generate(paint_session * session)
 {
-    rct_drawpixelinfo * dpi = session->Unk140E9A8;
+    rct_drawpixelinfo * dpi = session->DPI;
     LocationXY16 mapTile =
     {
         (sint16)(dpi->x & 0xFFE0),
@@ -445,7 +448,7 @@ paint_struct * paint_arrange_structs_helper(paint_struct * ps_next, uint16 quadr
 */
 paint_struct paint_session_arrange(paint_session * session)
 {
-    paint_struct psHead = { 0 };
+    paint_struct psHead = {};
     paint_struct * ps = &psHead;
     ps->next_quadrant_ps = nullptr;
     uint32 quadrantIndex = session->QuadrantBackIndex;
@@ -727,7 +730,7 @@ paint_session * paint_session_alloc(rct_drawpixelinfo * dpi)
     return session;
 }
 
-void paint_session_free(paint_session * session)
+void paint_session_free([[maybe_unused]] paint_session* session)
 {
     _paintSessionInUse = false;
 }
@@ -839,7 +842,7 @@ paint_struct * sub_98196C(
     sint16 right = left + g1Element->width;
     sint16 top = bottom + g1Element->height;
 
-    rct_drawpixelinfo *dpi = session->Unk140E9A8;
+    rct_drawpixelinfo *dpi = session->DPI;
 
     if (right <= dpi->x) return nullptr;
     if (top <= dpi->y) return nullptr;
@@ -897,6 +900,7 @@ paint_struct * sub_98196C(
 * @param bound_box_offset_z (0x009DEA56)
 * @return (ebp) paint_struct on success (CF == 0), nullptr on failure (CF == 1)
 */
+// Track Pieces, Shops.
 paint_struct * sub_98197C(
     paint_session * session,
     uint32          image_id,
@@ -1201,7 +1205,7 @@ void paint_draw_money_structs(rct_drawpixelinfo * dpi, paint_string_struct * ps)
         // Use sprite font unless the currency contains characters unsupported by the sprite font
         bool forceSpriteFont = false;
         const currency_descriptor& currencyDesc = CurrencyDescriptors[gConfigGeneral.currency_format];
-        if (gUseTrueTypeFont && font_supports_string_sprite(currencyDesc.symbol_unicode))
+        if (LocalisationService_UseTrueTypeFont() && font_supports_string_sprite(currencyDesc.symbol_unicode))
         {
             forceSpriteFont = true;
         }

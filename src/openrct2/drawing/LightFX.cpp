@@ -277,7 +277,7 @@ void lightfx_prepare_light_list()
             }
 
             for (sint32 pat = startSamplePoint; pat < totalSamplePoints; pat++) {
-                LocationXY16 mapCoord = { 0 };
+                LocationXY16 mapCoord = {};
 
                 rct_tile_element *tileElement = nullptr;
 
@@ -299,7 +299,7 @@ void lightfx_prepare_light_list()
                     dpi->height = 1;
                     dpi->width = 1;
                     gPaintSession.EndOfPaintStructArray = 0xF1A4CC;
-                    gPaintSession.Unk140E9A8 = dpi;
+                    gPaintSession.DPI = dpi;
                     painter_setup();
                     viewport_paint_setup();
                     paint_session_arrange(gPaintSession);

@@ -45,6 +45,7 @@ static std::mutex _mutex;
 static uint32 _numPlayersOnline = 0;
 static rct_string_id status_text = STR_SERVER_LIST_CONNECTING;
 
+// clang-format off
 enum {
     WIDX_BACKGROUND,
     WIDX_TITLE,
@@ -116,6 +117,7 @@ static rct_window_event_list window_server_list_events = {
     window_server_list_paint,
     window_server_list_scrollpaint
 };
+// clang-format on
 
 enum {
     DDIDX_JOIN,
@@ -609,18 +611,6 @@ static void join_server(std::string address)
     }
 }
 
-static uint32 get_total_player_count()
-{
-    return std::accumulate(
-        _serverEntries.begin(),
-        _serverEntries.end(),
-        0,
-        [](uint32 acc, const server_entry &entry)
-        {
-            return acc + entry.players;
-        });
-}
-
 static void fetch_servers()
 {
 #ifndef DISABLE_HTTP
@@ -654,6 +644,18 @@ static void fetch_servers()
 }
 
 #ifndef DISABLE_HTTP
+static uint32 get_total_player_count()
+{
+    return std::accumulate(
+        _serverEntries.begin(),
+        _serverEntries.end(),
+        0,
+        [](uint32 acc, const server_entry &entry)
+        {
+            return acc + entry.players;
+        });
+}
+
 static void fetch_servers_callback(http_response_t* response)
 {
     if (response == nullptr) {

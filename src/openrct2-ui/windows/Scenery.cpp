@@ -38,6 +38,7 @@
 #define SCENERY_BUTTON_HEIGHT   80
 #define SCENERY_WINDOW_TABS     (MAX_SCENERY_GROUP_OBJECTS + 1) // The + 1 is for the 'Miscellaneous' tab
 
+// clang-format off
 enum {
     WINDOW_SCENERY_TAB_1,
     WINDOW_SCENERY_TAB_2,
@@ -181,6 +182,7 @@ static rct_widget window_scenery_widgets[] = {
     { WWT_FLATBTN, 1, 609, 632, 154, 177, SPR_SCENERY_CLUSTER, STR_SCENERY_CLUSTER_TIP },                                   // 40000000         0x009DE478
     { WIDGETS_END },
 };
+// clang-format on
 
 void window_scenery_update_scroll(rct_window *w);
 
@@ -390,7 +392,7 @@ void window_scenery_set_default_placement_configuration()
     window_scenery_init();
 
     for (sint32 i = 0; i < SCENERY_WINDOW_TABS; i++)
-        gWindowSceneryTabSelections[i] = -1;
+        gWindowSceneryTabSelections[i] = WINDOW_SCENERY_TAB_SELECTION_UNDEFINED;
 
     for (sint32 i = 0; i < SCENERY_WINDOW_TABS; i++) {
         if (window_scenery_tab_entries[i][0] != -1) {
@@ -462,7 +464,7 @@ rct_window * window_scenery_open()
         (1 << WIDX_SCENERY_REPAINT_SCENERY_BUTTON) |
         (1 << WIDX_SCENERY_TERTIARY_COLOUR_BUTTON) |
         (1 << WIDX_SCENERY_EYEDROPPER_BUTTON) |
-        (1 << WIDX_SCENERY_BUILD_CLUSTER_BUTTON);
+        (1ULL << WIDX_SCENERY_BUILD_CLUSTER_BUTTON);
 
     window_init_scroll_widgets(window);
     window_scenery_update_scroll(window);
@@ -1275,6 +1277,6 @@ void window_scenery_reset_selected_scenery_items()
 {
     for (size_t i = 0; i < SCENERY_WINDOW_TABS; i++)
     {
-        gWindowSceneryTabSelections[i] = -1;
+        gWindowSceneryTabSelections[i] = WINDOW_SCENERY_TAB_SELECTION_UNDEFINED;
     }
 }

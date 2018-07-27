@@ -34,6 +34,7 @@
 #include <openrct2/world/Sprite.h>
 #include <openrct2/management/Finance.h>
 
+// clang-format off
 enum WINDOW_GAME_BOTTOM_TOOLBAR_WIDGET_IDX
 {
     WIDX_LEFT_OUTSET,
@@ -122,6 +123,7 @@ static rct_window_event_list window_game_bottom_toolbar_events =
     window_game_bottom_toolbar_paint,
     nullptr
 };
+// clang-format on
 
 static void window_game_bottom_toolbar_invalidate_dirty_widgets(rct_window *w);
 
@@ -245,7 +247,7 @@ static void window_game_bottom_toolbar_tooltip(rct_window* w, rct_widgetindex wi
         set_format_arg(0, sint16, gParkRating);
         break;
     case WIDX_DATE:
-        month = gDateMonthsElapsed % 8;
+        month = date_get_month(gDateMonthsElapsed);
         day = ((gDateMonthTicks * days_in_month[month]) >> 16) & 0xFF;
 
         set_format_arg(0, rct_string_id, DateDayNames[day]);
@@ -555,7 +557,7 @@ static void window_game_bottom_toolbar_draw_right_panel(rct_drawpixelinfo *dpi, 
 
     // Date
     sint32 year = date_get_year(gDateMonthsElapsed) + 1;
-    sint32 month = date_get_month(gDateMonthsElapsed & 7);
+    sint32 month = date_get_month(gDateMonthsElapsed);
     sint32 day = ((gDateMonthTicks * days_in_month[month]) >> 16) & 0xFF;
 
     rct_string_id stringId = DateFormatStringFormatIds[gConfigGeneral.date_format];

@@ -14,21 +14,22 @@
  *****************************************************************************/
 #pragma endregion
 
+#include <openrct2/actions/ParkMarketingAction.hpp>
 #include <openrct2/config/Config.h>
 #include <openrct2/core/Math.hpp>
-#include <openrct2-ui/windows/Window.h>
-
-#include <openrct2/actions/ParkMarketingAction.hpp>
+#include <openrct2/drawing/Drawing.h>
 #include <openrct2/Game.h>
 #include <openrct2/localisation/Localisation.h>
-#include <openrct2-ui/interface/Widget.h>
 #include <openrct2/ride/Ride.h>
 #include <openrct2/ride/RideData.h>
+#include <openrct2/ride/ShopItem.h>
 #include <openrct2-ui/interface/Dropdown.h>
-#include <openrct2/drawing/Drawing.h>
+#include <openrct2-ui/interface/Widget.h>
+#include <openrct2-ui/windows/Window.h>
 
 #define SELECTED_RIDE_UNDEFINED ((uint16)0xFFFF)
 
+// clang-format off
 enum WINDOW_NEW_CAMPAIGN_WIDGET_IDX {
     WIDX_BACKGROUND,
     WIDX_TITLE,
@@ -47,13 +48,11 @@ static rct_widget window_new_campaign_widgets[] = {
     { WWT_FRAME,            0,      0,      349,    0,      106,        0xFFFFFFFF,                                     STR_NONE },             // panel / background
     { WWT_CAPTION,          0,      1,      348,    1,      14,         0,                                              STR_WINDOW_TITLE_TIP }, // title bar
     { WWT_CLOSEBOX,         0,      337,    347,    2,      13,         STR_CLOSE_X,                                    STR_CLOSE_WINDOW_TIP }, // close x button
-    { WWT_LABEL,            0,      0,      139,    24,     35,         0,                                              STR_NONE },             // ride label
+    { WWT_LABEL,            0,      14,     139,    24,     35,         0,                                              STR_NONE },             // ride label
     { WWT_DROPDOWN,         0,      100,    341,    24,     35,         0,                                              STR_NONE },             // ride dropdown
     { WWT_BUTTON,           0,      330,    340,    25,     34,         STR_DROPDOWN_GLYPH,                             STR_NONE },             // ride dropdown button
-    { WWT_LABEL,            0,      0,      139,    41,     52,         STR_LENGTH_OF_TIME,                             STR_NONE },             // weeks label
-    { WWT_SPINNER,          0,      120,    219,    41,     52,         0,                                              STR_NONE },             // weeks
-    { WWT_BUTTON,           0,      208,    218,    42,     46,         STR_NUMERIC_UP,                                 STR_NONE },             // weeks +
-    { WWT_BUTTON,           0,      208,    218,    47,     51,         STR_NUMERIC_DOWN,                               STR_NONE },             // weeks -
+    { WWT_LABEL,            0,      14,     139,    41,     52,         STR_LENGTH_OF_TIME,                             STR_NONE },             // weeks label
+      SPINNER_WIDGETS      (0,      120,    219,    41,     52,         0,                                              STR_NONE),              // weeks (3 widgets)
     { WWT_BUTTON,           0,      14,     335,    89,     100,        STR_MARKETING_START_THIS_MARKETING_CAMPAIGN,    STR_NONE },             // start button
     { WIDGETS_END }
 };
@@ -95,6 +94,7 @@ static rct_window_event_list window_new_campaign_events = {
     window_new_campaign_paint,
     nullptr
 };
+// clang-format on
 
 static uint8 window_new_campaign_rides[MAX_RIDES];
 static uint8 window_new_campaign_shop_items[64];

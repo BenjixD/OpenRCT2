@@ -1,6 +1,8 @@
-#include <openrct2/interface/Console.h>
+#pragma once
 
-namespace OpenRCT2 { namespace Ui
+#include <openrct2/interface/InteractiveConsole.h>
+
+namespace OpenRCT2::Ui
 {
     class InGameConsole final : public InteractiveConsole
     {
@@ -53,4 +55,4 @@ namespace OpenRCT2 { namespace Ui
         void Invalidate() const;
         sint32 GetNumVisibleLines() const;
     };
-} }
+} // namespace OpenRCT2::Ui

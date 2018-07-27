@@ -26,12 +26,14 @@
 #include <openrct2/localisation/Date.h>
 #include <openrct2/localisation/Localisation.h>
 #include <openrct2/ride/RideData.h>
+#include <openrct2/ride/ShopItem.h>
 #include <openrct2/sprites.h>
 #include <openrct2-ui/interface/Dropdown.h>
 #include <openrct2/management/Finance.h>
 #include <openrct2/scenario/Scenario.h>
 #include <openrct2/world/Park.h>
 
+// clang-format off
 enum
 {
     WINDOW_FINANCES_PAGE_SUMMARY,
@@ -99,9 +101,7 @@ static rct_widget _windowFinancesSummaryWidgets[] =
     { WWT_RESIZE,           1,  0,      529,    43, 309,    0xFFFFFFFF,                 STR_NONE                                }, \
     TAB_WIDGETS,
     { WWT_SCROLL,           1,  130,    520,     50,    260,    SCROLL_HORIZONTAL,                  STR_NONE },
-    { WWT_SPINNER,          1,  64,     153,    279,    290,    STR_FINANCES_SUMMARY_LOAN_VALUE,    STR_NONE },
-    { WWT_BUTTON,           1,  142,    152,    280,    284,    STR_NUMERIC_UP,                     STR_NONE },
-    { WWT_BUTTON,           1,  142,    152,    285,    289,    STR_NUMERIC_DOWN,                   STR_NONE },
+      SPINNER_WIDGETS      (1,  64,     153,    279,    290,    STR_FINANCES_SUMMARY_LOAN_VALUE,    STR_NONE), // NB: 3 widgets.
     { WIDGETS_END },
 };
 
@@ -517,6 +517,7 @@ static constexpr const rct_string_id window_finances_summary_row_labels[RCT_EXPE
     STR_FINANCES_SUMMARY_RESEARCH,
     STR_FINANCES_SUMMARY_LOAN_INTEREST,
 };
+// clang-format on
 
 static void window_finances_set_page(rct_window *w, sint32 page);
 static void window_finances_set_pressed_tab(rct_window *w);

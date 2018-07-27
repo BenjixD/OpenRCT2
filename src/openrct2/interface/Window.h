@@ -17,6 +17,7 @@
 #ifndef _WINDOW_H_
 #define _WINDOW_H_
 
+#include <limits>
 #include "../common.h"
 
 struct rct_drawpixelinfo;
@@ -113,6 +114,8 @@ struct rct_scroll {
     uint16 v_thumb_top;         // 0x0E
     uint16 v_thumb_bottom;      // 0x10
 };
+
+constexpr auto WINDOW_SCROLL_UNDEFINED = std::numeric_limits<uint16>::max();
 
 /**
  * Viewport focus structure.
@@ -428,6 +431,7 @@ enum {
     WD_BANNER,
     WD_NEW_CAMPAIGN,
     WD_DEMOLISH_RIDE,
+    WD_REFURBISH_RIDE,
     WD_SIGN,
     WD_SIGN_SMALL,
 
@@ -453,18 +457,13 @@ enum {
 #define WC_RIDE_CONSTRUCTION__WIDX_ROTATE               32
 #define WC_SCENERY__WIDX_SCENERY_TAB_1                  4
 #define WC_SCENERY__WIDX_SCENERY_ROTATE_OBJECTS_BUTTON  25
-#define WC_LAND__WIDX_PREVIEW                           5
-#define WC_WATER__WIDX_PREVIEW                          3
 #define WC_PEEP__WIDX_PATROL                            11
 #define WC_PEEP__WIDX_ACTION_LBL                        12
 #define WC_PEEP__WIDX_PICKUP                            13
 #define WC_TRACK_DESIGN_LIST__WIDX_ROTATE               8
 #define WC_TRACK_DESIGN_PLACE__WIDX_ROTATE              3
-#define WC_MAP__WIDX_LAND_TOOL                          13
 #define WC_MAP__WIDX_ROTATE_90                          20
-#define WC_EDITOR_OBJECT_SELECTION__WIDX_TAB_1          4
-#define WC_CLEAR_SCENERY__WIDX_PREVIEW                  3
-#define WC_LAND_RIGHTS__WIDX_PREVIEW                    3
+#define WC_EDITOR_OBJECT_SELECTION__WIDX_TAB_1          21
 #define WC_STAFF__WIDX_PICKUP                           10
 
 enum PROMPT_MODE {

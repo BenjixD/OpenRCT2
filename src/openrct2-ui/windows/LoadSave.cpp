@@ -46,6 +46,7 @@
 #define WW 340
 #define WH 400
 
+// clang-format off
 enum
 {
     WIDX_BACKGROUND,
@@ -128,6 +129,7 @@ static rct_window_event_list window_loadsave_events =
     window_loadsave_paint,
     window_loadsave_scrollpaint
 };
+// clang-format on
 
 #pragma endregion
 
@@ -314,7 +316,7 @@ static void window_loadsave_resize(rct_window *w)
 
 static bool browse(bool isSave, char *path, size_t pathSize)
 {
-    file_dialog_desc desc = { 0 };
+    file_dialog_desc desc = {};
     const utf8 * extension = "";
     uint32 fileType = FILE_EXTENSION_UNKNOWN;
     rct_string_id title = STR_NONE;

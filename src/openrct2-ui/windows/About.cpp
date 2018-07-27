@@ -21,12 +21,14 @@
 
 #include <openrct2-ui/interface/Widget.h>
 #include <openrct2/localisation/Localisation.h>
+#include <openrct2/localisation/LocalisationService.h>
 #include <openrct2/sprites.h>
 
 #define WW 400
 #define WH 350
 #define TABHEIGHT 50
 
+// clang-format off
 enum
 {
     WINDOW_ABOUT_PAGE_OPENRCT2,
@@ -156,6 +158,7 @@ static rct_window_event_list *window_about_page_events[] = {
     &window_about_openrct2_events,
     &window_about_rct2_events,
 };
+// clang-format on
 
 static void window_about_set_page(rct_window *w, sint32 page);
 
@@ -249,7 +252,7 @@ static void window_about_openrct2_paint(rct_window *w, rct_drawpixelinfo *dpi)
 
     // Copyright disclaimer; hidden when using truetype fonts to prevent
     // the text from overlapping the changelog button.
-    if (!gUseTrueTypeFont)
+    if (!LocalisationService_UseTrueTypeFont())
     {
         gfx_draw_string_centred_wrapped(dpi, nullptr, x, y, width, STR_ABOUT_OPENRCT2_DESCRIPTION_3, w->colours[2]);
     }

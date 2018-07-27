@@ -17,6 +17,7 @@
 #include "actions/ParkSetLoanAction.hpp"
 #include "Cheats.h"
 #include "config/Config.h"
+#include "GameState.h"
 #include "localisation/Localisation.h"
 #include "network/network.h"
 #include "ride/Ride.h"
@@ -28,6 +29,9 @@
 #include "world/Park.h"
 #include "world/Scenery.h"
 #include "world/Sprite.h"
+#include "world/Surface.h"
+
+using namespace OpenRCT2;
 
 bool gCheatsSandboxMode = false;
 bool gCheatsDisableClearanceChecks = false;
@@ -69,10 +73,10 @@ static void cheat_set_grass_length(sint32 length)
             if (!(tileElement->properties.surface.ownership & OWNERSHIP_OWNED))
                 continue;
 
-            if (tile_element_get_terrain(tileElement) != TERRAIN_GRASS)
+            if (surface_get_terrain(tileElement) != TERRAIN_GRASS)
                 continue;
 
-            if (map_get_water_height(tileElement) > 0)
+            if (surface_get_water_height(tileElement) > 0)
                 continue;
 
             tileElement->properties.surface.grass_length = length;
@@ -88,7 +92,7 @@ static void cheat_water_plants()
 
     tile_element_iterator_begin(&it);
     do {
-        if (tile_element_get_type(it.element) == TILE_ELEMENT_TYPE_SMALL_SCENERY) {
+        if (it.element->GetType() == TILE_ELEMENT_TYPE_SMALL_SCENERY) {
             it.element->properties.scenery.age = 0;
         }
     } while (tile_element_iterator_next(&it));
@@ -102,7 +106,7 @@ static void cheat_fix_vandalism()
 
     tile_element_iterator_begin(&it);
     do {
-        if (tile_element_get_type(it.element) != TILE_ELEMENT_TYPE_PATH)
+        if (it.element->GetType() != TILE_ELEMENT_TYPE_PATH)
             continue;
 
         if (!footpath_element_has_path_scenery(it.element))
@@ -130,7 +134,7 @@ static void cheat_remove_litter()
 
     tile_element_iterator_begin(&it);
     do {
-        if (tile_element_get_type(it.element) != TILE_ELEMENT_TYPE_PATH)
+        if (it.element->GetType() != TILE_ELEMENT_TYPE_PATH)
             continue;
 
         if (!footpath_element_has_path_scenery(it.element))
@@ -158,7 +162,7 @@ static void cheat_fix_rides()
             mechanic = ride_get_assigned_mechanic(ride);
 
             if (mechanic != nullptr){
-                remove_peep_from_ride(mechanic);
+                mechanic->RemoveFromRide();
             }
 
             ride_fix_breakdown(rideIndex, 0);
@@ -266,9 +270,11 @@ static void cheat_clear_loan()
 
 static void cheat_generate_guests(sint32 count)
 {
+    auto& park = GetContext()->GetGameState()->GetPark();
     for (sint32 i = 0; i < count; i++)
-        park_generate_new_guest();
-
+    {
+        park.GenerateGuest();
+    }
     window_invalidate_by_class(WC_BOTTOM_TOOLBAR);
 }
 
@@ -313,7 +319,7 @@ static void cheat_set_guest_parameter(sint32 parameter, sint32 value)
             peep->intensity = (15 << 4) | value;
             break;
         }
-        peep_update_sprite_type(peep);
+        peep->UpdateSpriteType();
     }
 
 }
@@ -335,12 +341,12 @@ static void cheat_give_all_guests(sint32 object)
             case OBJECT_BALLOON:
                 peep->item_standard_flags |= PEEP_ITEM_BALLOON;
                 peep->balloon_colour = scenario_rand_max(COLOUR_COUNT - 1);
-                peep_update_sprite_type(peep);
+                peep->UpdateSpriteType();
                 break;
             case OBJECT_UMBRELLA:
                 peep->item_standard_flags |= PEEP_ITEM_UMBRELLA;
                 peep->umbrella_colour = scenario_rand_max(COLOUR_COUNT - 1);
-                peep_update_sprite_type(peep);
+                peep->UpdateSpriteType();
                 break;
         }
     }
@@ -398,7 +404,7 @@ static void cheat_remove_all_guests()
         peep = &(get_sprite(spriteIndex)->peep);
         nextSpriteIndex = peep->next;
         if (peep->type == PEEP_TYPE_GUEST) {
-            peep_remove(peep);
+            peep->Remove();
         }
     }
 
@@ -448,7 +454,7 @@ static void cheat_own_all_land()
             // only own tiles that were not set to 0
             if (destOwnership != OWNERSHIP_UNOWNED) {
                 surfaceElement->properties.surface.ownership |= destOwnership;
-                update_park_fences_around_tile(coords.x, coords.y);
+                update_park_fences_around_tile(coords);
                 uint16 baseHeight = surfaceElement->base_height * 8;
                 map_invalidate_tile(coords.x, coords.y, baseHeight, baseHeight + 16);
             }
@@ -462,7 +468,7 @@ static void cheat_own_all_land()
         if (x != PEEP_SPAWN_UNDEFINED) {
             rct_tile_element * surfaceElement = map_get_surface_element_at({x, y});
             surfaceElement->properties.surface.ownership = OWNERSHIP_UNOWNED;
-            update_park_fences_around_tile(x, y);
+            update_park_fences_around_tile({x, y});
             uint16 baseHeight = surfaceElement->base_height * 8;
             map_invalidate_tile(x, y, baseHeight, baseHeight + 16);
         }
@@ -473,7 +479,14 @@ static void cheat_own_all_land()
 
 #pragma endregion
 
-void game_command_cheat(sint32* eax, sint32* ebx, sint32* ecx, sint32* edx, sint32* esi, sint32* edi, sint32* ebp)
+void game_command_cheat(
+    [[maybe_unused]] sint32 * eax,
+    sint32 *                  ebx,
+    sint32 *                  ecx,
+    sint32 *                  edx,
+    [[maybe_unused]] sint32 * esi,
+    sint32 *                  edi,
+    [[maybe_unused]] sint32 * ebp)
 {
     sint32 cheat = *ecx;
     if (*ebx & GAME_COMMAND_FLAG_APPLY)

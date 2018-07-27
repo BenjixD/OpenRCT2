@@ -217,7 +217,7 @@ void research_finish_item(rct_research_item * researchItem)
             {
                 const RideGroup * rideGroup = RideGroupManager::GetRideGroup(base_ride_type, rideEntry);
 
-                if (RideGroupManager::RideGroupIsInvented(rideGroup))
+                if (rideGroup->IsInvented())
                 {
                     ride_group_was_invented_before = true;
                 }
@@ -549,6 +549,8 @@ void research_insert(sint32 researched, sint32 rawValue, uint8 category)
  */
 void research_populate_list_random()
 {
+    research_reset_items();
+
     // Rides
     for (sint32 i = 0; i < MAX_RIDE_OBJECTS; i++)
     {

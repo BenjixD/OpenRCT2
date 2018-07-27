@@ -35,7 +35,7 @@
 #include "../config/Config.h"
 #include "../drawing/Drawing.h"
 #include "../Game.h"
-#include "../interface/Console.h"
+#include "../interface/InteractiveConsole.h"
 #include "../localisation/Localisation.h"
 #include "../management/NewsItem.h"
 #include "../peep/Peep.h"
@@ -78,7 +78,7 @@ namespace Twitch
 
         static AudienceMember FromJson(json_t * json)
         {
-            AudienceMember member = { nullptr };
+            AudienceMember member = {};
 
             if (!json_is_object(json)) return member;
             json_t * name = json_object_get(json, "name");
@@ -102,7 +102,6 @@ namespace Twitch
      * have a lower latency.
      */
     constexpr uint32 PulseTime = 10 * 1000;
-    constexpr const char * TwitchExtendedBaseUrl = "http://openrct.ursalabs.co/api/1/";
 
     static sint32               _twitchState = TWITCH_STATE_LEFT;
     static bool              _twitchIdle = true;
@@ -192,7 +191,14 @@ namespace Twitch
     static void Join()
     {
         char url[256];
-        snprintf(url, sizeof(url), "%sjoin/%s", TwitchExtendedBaseUrl, gConfigTwitch.channel);
+
+        if (gConfigTwitch.api_url == nullptr || strlen(gConfigTwitch.api_url) == 0)
+        {
+            auto context = GetContext();
+            context->WriteLine("API URL is empty! skipping request...");
+            return;
+        }
+        snprintf(url, sizeof(url), "%s/join/%s", gConfigTwitch.api_url, gConfigTwitch.channel);
 
         _twitchState = TWITCH_STATE_JOINING;
         _twitchIdle = false;
@@ -270,7 +276,14 @@ namespace Twitch
     static void GetFollowers()
     {
         char url[256];
-        snprintf(url, sizeof(url), "%schannel/%s/audience", TwitchExtendedBaseUrl, gConfigTwitch.channel);
+
+        if (gConfigTwitch.api_url == nullptr || strlen(gConfigTwitch.api_url) == 0)
+        {
+            auto context = GetContext();
+            context->WriteLine("API URL is empty! skipping request...");
+            return;
+        }
+        snprintf(url, sizeof(url), "%s/channel/%s/audience", gConfigTwitch.api_url, gConfigTwitch.channel);
 
         _twitchState = TWITCH_STATE_WAITING;
         _twitchIdle = false;
@@ -301,7 +314,14 @@ namespace Twitch
     static void GetMessages()
     {
         char url[256];
-        snprintf(url, sizeof(url), "%schannel/%s/messages", TwitchExtendedBaseUrl, gConfigTwitch.channel);
+
+        if (gConfigTwitch.api_url == nullptr || strlen(gConfigTwitch.api_url) == 0)
+        {
+            auto context = GetContext();
+            context->WriteLine("API URL is empty! skipping request...");
+            return;
+        }
+        snprintf(url, sizeof(url), "%s/channel/%s/messages", gConfigTwitch.api_url, gConfigTwitch.channel);
 
         _twitchState = TWITCH_STATE_WAITING;
         _twitchIdle = false;
@@ -554,7 +574,7 @@ namespace Twitch
             news_item_add_to_queue_raw(NEWS_ITEM_BLANK, buffer, 0);
         }
     }
-}
+} // namespace Twitch
 
 void twitch_update()
 {

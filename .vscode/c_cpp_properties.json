@@ -22,14 +22,17 @@
             "macFrameworkPath": [
                 "/System/Library/Frameworks",
                 "/Library/Frameworks"
-            ]
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         },
         {
             "name": "Linux",
             "includePath": [
                 "/usr/include",
                 "/usr/local/include",
-                "${workspaceRoot}"
+                "${workspaceRoot}",
+                "${workspaceRoot}/src"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
@@ -59,7 +62,8 @@
                 "${workspaceRoot}",
                 "${workspaceRoot}/src",
                 "${workspaceRoot}/lib/x86/include",
-                "${workspaceRoot}/lib/x64/include"
+                "${workspaceRoot}/lib/x64/include",
+                "${workspaceRoot}/lib/googletest/googletest/include"
             ],
             "defines": [
                 "_DEBUG",
@@ -79,8 +83,10 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         }
     ],
-    "version": 3
+    "version": 4
 }

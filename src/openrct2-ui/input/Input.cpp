@@ -22,7 +22,7 @@
 #include <openrct2/config/Config.h>
 #include <openrct2/Input.h>
 #include <openrct2/interface/Chat.h>
-#include <openrct2/interface/Console.h>
+#include <openrct2/interface/InteractiveConsole.h>
 #include <openrct2/paint/VirtualFloor.h>
 #include <openrct2-ui/windows/Window.h>
 #include "../interface/InGameConsole.h"
@@ -176,7 +176,7 @@ void input_handle_keyboard(bool isTitle)
         }
     }
 
-    if (gConfigGeneral.use_virtual_floor)
+    if (gConfigGeneral.virtual_floor_style != VIRTUAL_FLOOR_STYLE_OFF)
     {
         if (gInputPlaceObjectModifier & (PLACE_OBJECT_MODIFIER_COPY_Z | PLACE_OBJECT_MODIFIER_SHIFT_Z))
             virtual_floor_enable();

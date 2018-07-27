@@ -66,7 +66,7 @@ static void paint_twist_structure(paint_session * session, Ride * ride, uint8 di
     uint32 imageId           = (baseImageId + structureFrameNum) | imageColourFlags;
     sub_98197C(session, imageId, xOffset, yOffset, 24, 24, 48, height, xOffset + 16, yOffset + 16, height);
 
-    rct_drawpixelinfo * dpi = session->Unk140E9A8;
+    rct_drawpixelinfo * dpi = session->DPI;
 
     if (dpi->zoom_level < 1 && ride->lifecycle_flags & RIDE_LIFECYCLE_ON_TRACK && vehicle != nullptr)
     {
@@ -104,8 +104,7 @@ static void paint_twist(
 
     wooden_a_supports_paint_setup(session, (direction & 1), 0, height, session->TrackColours[SCHEME_MISC], nullptr);
 
-    track_paint_util_paint_floor(
-        session, edges, session->TrackColours[SCHEME_MISC], height, floorSpritesCork, session->CurrentRotation);
+    track_paint_util_paint_floor(session, edges, session->TrackColours[SCHEME_MISC], height, floorSpritesCork);
 
     switch (trackSequence)
     {

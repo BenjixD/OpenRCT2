@@ -77,11 +77,11 @@ public:
     rct_string_id           ErrorTitle = STR_NONE;
     rct_string_id           ErrorMessage = STR_NONE;
     std::array<uint8, 12>   ErrorMessageArgs;
-    CoordsXYZ               Position = { 0 };
+    CoordsXYZ               Position = {};
     money32                 Cost = 0;
     uint16                  ExpenditureType = 0;
 
-    GameActionResult();
+    GameActionResult() = default;
     GameActionResult(GA_ERROR error, rct_string_id message);
     GameActionResult(GA_ERROR error, rct_string_id title, rct_string_id message);
     GameActionResult(GA_ERROR error, rct_string_id title, rct_string_id message, uint8 * args);
@@ -252,4 +252,4 @@ namespace GameActions
         Register(T::TYPE, factory);
         return factory;
     }
-}
+} // namespace GameActions

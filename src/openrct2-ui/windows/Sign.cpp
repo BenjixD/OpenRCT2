@@ -29,10 +29,12 @@
 #include <openrct2/sprites.h>
 #include <openrct2/world/Banner.h>
 #include <openrct2/actions/SignSetNameAction.hpp>
+#include <openrct2/actions/WallRemoveAction.hpp>
 
 #define WW 113
 #define WH 96
 
+// clang-format off
 enum WINDOW_SIGN_WIDGET_IDX {
     WIDX_BACKGROUND,
     WIDX_TITLE,
@@ -133,6 +135,7 @@ static rct_window_event_list window_sign_small_events = {
     window_sign_paint,
     nullptr
 };
+// clang-format on
 
 /**
 *
@@ -168,7 +171,7 @@ rct_window * window_sign_open(rct_windownumber number)
 
     while (1)
     {
-        if (tile_element_get_type(tile_element) == TILE_ELEMENT_TYPE_LARGE_SCENERY)
+        if (tile_element->GetType() == TILE_ELEMENT_TYPE_LARGE_SCENERY)
         {
             rct_scenery_entry* scenery_entry = get_large_scenery_entry(scenery_large_get_type(tile_element));
             if (scenery_entry->large_scenery.scrolling_mode != 0xFF)
@@ -235,7 +238,7 @@ static void window_sign_mouseup(rct_window *w, rct_widgetindex widgetIndex)
     case WIDX_SIGN_DEMOLISH:
         while (1)
         {
-            if (tile_element_get_type(tile_element) == TILE_ELEMENT_TYPE_LARGE_SCENERY)
+            if (tile_element->GetType() == TILE_ELEMENT_TYPE_LARGE_SCENERY)
             {
                 rct_scenery_entry* scenery_entry = get_large_scenery_entry(scenery_large_get_type(tile_element));
                 if (scenery_entry->large_scenery.scrolling_mode != 0xFF)
@@ -249,7 +252,7 @@ static void window_sign_mouseup(rct_window *w, rct_widgetindex widgetIndex)
         }
         game_do_command(
             x,
-            1 | ((tile_element->type & TILE_ELEMENT_DIRECTION_MASK) << 8),
+            1 | (tile_element->GetDirection() << 8),
             y,
             tile_element->base_height | (scenery_large_get_sequence(tile_element) << 8),
             GAME_COMMAND_REMOVE_LARGE_SCENERY,
@@ -437,7 +440,7 @@ rct_window * window_sign_small_open(rct_windownumber number){
     rct_tile_element* tile_element = map_get_first_element_at(view_x / 32, view_y / 32);
 
     while (1){
-        if (tile_element_get_type(tile_element) == TILE_ELEMENT_TYPE_WALL) {
+        if (tile_element->GetType() == TILE_ELEMENT_TYPE_WALL) {
             rct_scenery_entry* scenery_entry = get_wall_entry(tile_element->properties.wall.type);
             if (scenery_entry->wall.scrolling_mode != 0xFF){
                 if (tile_element->properties.wall.banner_index == w->number)
@@ -499,28 +502,28 @@ static void window_sign_small_mouseup(rct_window *w, rct_widgetindex widgetIndex
         window_close(w);
         break;
     case WIDX_SIGN_DEMOLISH:
-        while (1){
-            if (tile_element_get_type(tile_element) == TILE_ELEMENT_TYPE_WALL) {
-                rct_scenery_entry* scenery_entry = get_wall_entry(tile_element->properties.wall.type);
-                if (scenery_entry->wall.scrolling_mode != 0xFF){
-                    if (tile_element->properties.wall.banner_index == w->number)
-                        break;
+        {
+            while (true)
+            {
+                if (tile_element->GetType() == TILE_ELEMENT_TYPE_WALL)
+                {
+                    rct_scenery_entry* scenery_entry = get_wall_entry(tile_element->properties.wall.type);
+                    if (scenery_entry->wall.scrolling_mode != 0xFF)
+                    {
+                        if (tile_element->properties.wall.banner_index == w->number)
+                            break;
+                    }
                 }
+                tile_element++;
             }
-            tile_element++;
+            TileCoordsXYZD wallLocation = { x >> 5, y >> 5, tile_element->base_height, tile_element->GetDirection() };
+            auto wallRemoveAction = WallRemoveAction(wallLocation);
+            GameActions::Execute(&wallRemoveAction);
         }
-        gGameCommandErrorTitle = STR_CANT_REMOVE_THIS;
-        game_do_command(
-            x,
-            1 | ((tile_element->type & TILE_ELEMENT_DIRECTION_MASK) << 8),
-            y,
-            (tile_element->base_height << 8) | (tile_element->type & TILE_ELEMENT_DIRECTION_MASK),
-            GAME_COMMAND_REMOVE_WALL,
-            0,
-            0);
         break;
     case WIDX_SIGN_TEXT:
-        if (banner->flags & BANNER_FLAG_LINKED_TO_RIDE){
+        if (banner->flags & BANNER_FLAG_LINKED_TO_RIDE)
+        {
             Ride* ride = get_ride(banner->colour);
             set_format_arg(16, uint32, ride->name_arguments);
             string_id = ride->name;
