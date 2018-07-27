@@ -39,7 +39,7 @@ export class Submission extends React.Component {
 	}
 
 	handleChangePort(event){
-		this.setState({port: event.target.value});
+		this.setState({port: event.target.port});
 	}
 
 	handleChangeFile(event){
