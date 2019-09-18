@@ -39,11 +39,13 @@ export class Submission extends React.Component {
 	}
 
 	handleChangePort(event){
-		this.setState({port: event.target.port});
+		var port = event.target.value;
+		this.setState({port: port});
 	}
 
 	handleChangeFile(event){
-		this.setState({file: event.target.files[0]});
+		var file = event.target.files[0];
+		this.setState({file: file});
 	}
 
 	handleSubmit(event){
@@ -51,8 +53,6 @@ export class Submission extends React.Component {
 		const formData = new FormData();
 		formData.append('port', this.state.port);
 		formData.append('save', this.state.file);
-
-		console.log(this.state.port);
 
 		axios.post(url, formData, 
 		{

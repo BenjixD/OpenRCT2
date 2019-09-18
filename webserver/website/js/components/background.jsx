@@ -8,7 +8,7 @@ import video from '../../assets/video.mp4'
 export default class Background extends React.Component {
 	render(){
 		return (
-			<video loop autoPlay poster={"build/"+poster}>
+			<video loop autoPlay muted poster={"build/"+poster}>
 				<source src={"build/"+video} type="video/mp4"></source>
 			</video>
 		);

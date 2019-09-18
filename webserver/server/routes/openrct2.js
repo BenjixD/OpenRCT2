@@ -38,7 +38,6 @@ var rctSave = multer({
 router.post('/start', rctSave.single('save'), function(req, res, next){
 	var save = req.file;
 	var port = Number.isInteger(Number(req.body.port)) ? req.body.port : rctConfig.port;
-
 	console.log(req.body.port);
 	console.log(save);
 
