@@ -29,7 +29,7 @@ if [ "$?" -eq 0 ]; then
 fi
 
 #run command
-~/OpenRCT2/build/openrct2 host "$FILE" --port "$PORT" --headless 
+openrct2 host "$FILE" --port "$PORT" --headless 
 echo "game is starting: $FILE : $PORT"
 
 exit 0 
